@@ -43,6 +43,11 @@
         border-radius: 1rem;
         word-wrap: break-word;
       }
+      .message-time {
+        font-size: 0.7rem;
+        color: #888;
+        margin-top: 0.2rem;
+      }
       .me .message-bubble {
         background: #dcf8c6;
       }
@@ -104,7 +109,8 @@
       form.addEventListener('submit', (e) => {
         e.preventDefault();
         if (input.value) {
-          const messageData = { id: clientId, msg: input.value };
+          const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+          const messageData = { id: clientId, msg: input.value, time };
           socket.emit('chat message', messageData);
           input.value = '';
         }
@@ -149,8 +155,13 @@
         messageBubble.classList.add('message-bubble');
         messageBubble.textContent = data.msg;
 
+        const messageTime = document.createElement('div');
+        messageTime.classList.add('message-time');
+        messageTime.textContent = data.time;
+
         messageContent.appendChild(username);
         messageContent.appendChild(messageBubble);
+        messageContent.appendChild(messageTime);
 
         item.appendChild(userIcon);
         item.appendChild(messageContent);
